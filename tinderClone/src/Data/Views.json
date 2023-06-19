@@ -1,0 +1,36 @@
+[
+    {
+        "id": 2,
+        "username": "khanh",
+        "firstname": "khanh",
+        "surename": "nguyen",
+        "gender": "FEMALE",
+        "suspended": false,
+        "description": "hello i looking for a male partner",
+        "avatarUrls": [],
+        "roles": [
+            "USER"
+        ],
+        "birth": "1996-04-02",
+        "interests": [
+            {
+                "id": 1,
+                "name": "jogging"
+            },
+            {
+                "id": 2,
+                "name": "panting"
+            },
+            {
+                "id": 3,
+                "name": "german language"
+            },
+            {
+                "id": 4,
+                "name": "shopping"
+            }
+        ],
+        "matchingRate": 93.3412364425152,
+        "distance": 6.658763557484809
+    }
+]

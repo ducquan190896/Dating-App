@@ -101,6 +101,10 @@ public class Users {
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Interest> interests = new ArrayList<>();
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade =  CascadeType.ALL, fetch =  FetchType.LAZY)
+    private List<Participant> participants = new ArrayList<>();
+
     public boolean getSuspended() {
         return this.suspended;
     }

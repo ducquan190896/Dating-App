@@ -24,8 +24,9 @@ public class UserSignUp {
     private LocalDate birth;
     private double longitude;
     private double latitude;
-    public UserSignUp(String username, String password, String firstname, String surename, GenderType gender,
-            String description, LocalDate birth, double longitude, double latitude) {
+    private List<String> interests;
+
+    public UserSignUp(String username, String password, String firstname, String surename, GenderType gender, String description, LocalDate birth, double longitude, double latitude ) {
         this.username = username;
         this.password = password;
         this.firstname = firstname;
@@ -36,5 +37,21 @@ public class UserSignUp {
         this.longitude = longitude;
         this.latitude = latitude;
     }
+
+    public UserSignUp(String username, String password, String firstname, String surename, GenderType gender,
+            String description, LocalDate birth, double longitude, double latitude, List<String> interests) {
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.surename = surename;
+        this.gender = gender;
+        this.description = description;
+        this.birth = birth;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.interests = interests;
+    }
+
+    
     
 }

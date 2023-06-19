@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import backend2.tinder.backend2.Mapper.BlockMapper;
 import backend2.tinder.backend2.Models.Block;
+import backend2.tinder.backend2.Models.Users;
 import backend2.tinder.backend2.Models.Response.BlockResponse;
 import backend2.tinder.backend2.Service.BlockService;
+import backend2.tinder.backend2.Service.UserService;
 
 @RestController
 @RequestMapping("/api/blocks")
@@ -21,12 +23,20 @@ public class BlockController {
     BlockMapper blockMapper;
     @Autowired
     BlockService blockService;
+    @Autowired
+    UserService userService;
 
     @GetMapping("/{blockedId}")
     public ResponseEntity<BlockResponse> getBlockByBlockedIdAndAuth(@PathVariable Long blockedId) {
         Block block = blockService.getByBlockedUserIdAndAuthUser(blockedId);
         BlockResponse res = blockMapper.mapBlockToResponse(block);
         return new ResponseEntity<BlockResponse>(res, HttpStatus.OK);
+    }
+     @GetMapping("/isExist/{blockedId}")
+    public ResponseEntity<Boolean> checkBlockByBlokedUserAndAuth(@PathVariable Long blockedId) {
+        Users authUser = userService.getAuthUser();
+        Boolean isBlocked = blockService.isBlockExist(blockedId, authUser.getId());
+        return new ResponseEntity<Boolean>(isBlocked, HttpStatus.OK);
     }
     @GetMapping("/block/{id}")
     public ResponseEntity<BlockResponse> getBlockByBlockId(@PathVariable Long id) {

@@ -97,7 +97,7 @@ public class BlockServiceIml implements BlockService{
         }
     
 
-        return block;
+        return blockRepos.save(block);
     }
 
     @Override

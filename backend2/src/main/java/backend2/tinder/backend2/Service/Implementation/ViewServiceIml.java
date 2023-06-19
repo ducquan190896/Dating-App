@@ -48,7 +48,7 @@ public class ViewServiceIml implements ViewService{
         
         Preference authPreference = preferenceService.getByUserId(authUser.getId());
         LocalDate currentDate = LocalDate.now();
-        List<Like> likes = likeservice.getByLikingUserId(authUser.getId());
+        List<Like> likes = likeservice.getByLikingUserIdForBlockCheck(authUser.getId());
         List<Users> likedUsers = likes.stream().map(like -> like.getLikedUser()).collect(Collectors.toList());
 
         List<Users> list = userRepos.findByGenderAndSuspended(authPreference.getGenderOrientation(), false);
@@ -81,6 +81,7 @@ public class ViewServiceIml implements ViewService{
             })
             .filter(view -> view.getDistance() <= authPreference.getDistance())
             .collect(Collectors.toList());
+        System.out.println(views);
         return views;
     }
 

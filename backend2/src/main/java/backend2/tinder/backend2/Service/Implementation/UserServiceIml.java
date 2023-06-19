@@ -1,6 +1,7 @@
 package backend2.tinder.backend2.Service.Implementation;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,11 +27,14 @@ import backend2.tinder.backend2.Exception.BadResultException;
 import backend2.tinder.backend2.Exception.EntityExistingException;
 import backend2.tinder.backend2.Exception.EntityNotFoundException;
 import backend2.tinder.backend2.Mapper.UserMapper;
+import backend2.tinder.backend2.Models.Interest;
 import backend2.tinder.backend2.Models.Users;
+import backend2.tinder.backend2.Models.Enums.Role;
 import backend2.tinder.backend2.Models.Request.PasswordForm;
 import backend2.tinder.backend2.Models.Request.UserSignIn;
 import backend2.tinder.backend2.Models.Request.UserSignUp;
 import backend2.tinder.backend2.Models.Response.UserResponse;
+import backend2.tinder.backend2.Repository.InterestRepos;
 import backend2.tinder.backend2.Repository.UserRepos;
 import backend2.tinder.backend2.Security.SecurityConstant;
 import backend2.tinder.backend2.Service.UserService;
@@ -45,6 +49,8 @@ public class UserServiceIml implements UserService, UserDetailsService {
     UserMapper userMapper;
     @Autowired
     HttpServletResponse response;
+    @Autowired
+    InterestRepos interestRepos;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -104,9 +110,39 @@ public class UserServiceIml implements UserService, UserDetailsService {
         if(entity.isPresent()) {
          throw new EntityExistingException("the username exists");
         }
-        Users user = new Users(signUp.getUsername(), new BCryptPasswordEncoder().encode(signUp.getPassword()), signUp.getFirstname(), signUp.getSurename(), signUp.getGender(), signUp.getDescription(), signUp.getAvatarUrls(), signUp.getBirth(), signUp.getLongitude(), signUp.getLatitude());
-
+        Users user = new Users(signUp.getUsername(), new BCryptPasswordEncoder().encode(signUp.getPassword()), signUp.getFirstname(), signUp.getSurename(), signUp.getGender(), signUp.getDescription(), signUp.getAvatarUrls(), signUp.getBirth(), signUp.getLatitude(), signUp.getLongitude());
+        user.getRoles().add(Role.USER);
         userRepos.save(user);
+
+        List<Interest> lists = new ArrayList<>();
+        signUp.getInterests().stream().forEach(hobby -> {
+                Interest interest = new Interest(hobby);
+                Optional<Interest> entityInterest = interestRepos.findByName(interest.getName());
+				if(entityInterest.isPresent()) {
+					interest = entityInterest.get();
+					interest.getUsers().add(user);
+					interest = interestRepos.save(interest);
+					user.getInterest().add(interest);
+				} else {
+                    interest.getUsers().add(user);
+                    interest = interestRepos.save(interest);
+                    user.getInterest().add(interest);
+               }			
+               lists.add(interest);	
+        });
+        userRepos.save(user);
+
+        List<String> claims = user.getRoles().stream().map(auth -> auth.getName()).collect(Collectors.toList());
+        String token = JWT.create()
+        .withSubject(user.getUsername())
+        .withClaim("authorities", claims)
+        .withExpiresAt(new Date(System.currentTimeMillis() + SecurityConstant.expire_time))
+        .sign(Algorithm.HMAC512(SecurityConstant.private_key));
+        
+      
+        response.setStatus(HttpServletResponse.SC_OK); 
+        response.setHeader("Authorization", SecurityConstant.authorization + token);
+
         return userMapper.mapUserToResponse(user);
 
     }
@@ -155,6 +191,42 @@ public class UserServiceIml implements UserService, UserDetailsService {
         System.out.println(res);
         return res;
     
+    }
+
+    @Override
+    public Users addImage(String img) {
+        Users auth = getAuthUser();
+        auth.getAvatarUrls().add(img);
+        userRepos.save(auth);
+        return auth;
+    }
+
+
+    @Override
+    public Users removeImage(String img) {
+        Users auth = getAuthUser();
+        auth.getAvatarUrls().remove(img);
+        userRepos.save(auth);
+        return auth;
+    }
+
+    @Override
+    public UserResponse updateProfile(String firstname, String surename, String description) {
+        Users auth = getAuthUser();
+        if(firstname != null) {
+            auth.setFirstname(firstname);
+        }
+        if(surename != null) {
+            auth.setSurename(surename);
+        }
+        if(description != null) {
+            auth.setDescription(description);
+        }
+
+        userRepos.save(auth);
+        UserResponse res = userMapper.mapUserToResponse(auth);
+        System.out.println(res);
+        return res;
     }
 
     @Override

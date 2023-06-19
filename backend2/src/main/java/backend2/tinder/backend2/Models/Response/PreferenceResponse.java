@@ -15,7 +15,7 @@ import lombok.Setter;
 public class PreferenceResponse {
     private long id;
     private long distance;
-    private GenderType genderGenderType;
+    private GenderType genderOrientation;
     private int maxAge;
     private int minAge;
     private long userId;

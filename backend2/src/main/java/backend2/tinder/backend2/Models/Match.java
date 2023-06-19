@@ -41,6 +41,9 @@ public class Match {
     @Column(name = "updated_date")
     private LocalDateTime updatedDate;
 
+    @OneToOne(mappedBy = "match", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Chat chat;
+
     public boolean getIsBlock() {
         return this.isBlocked;
     }

@@ -38,6 +38,13 @@ public class InterestController {
     public ResponseEntity<Interest> update(@PathVariable Long id, @PathVariable String name) {
         return new ResponseEntity<Interest>(interestService.update(id, name), HttpStatus.CREATED);
     }
+
+    @PutMapping("/interest/{id}/remove/authUser")
+    public ResponseEntity<HttpStatus> removeInterestFromUser(@PathVariable Long id) {
+        interestService.removeInterestFromUser(id);
+        return new ResponseEntity<HttpStatus>( HttpStatus.CREATED);
+    }
+
     @GetMapping("/interest/{name}")
     public ResponseEntity<Interest> get( @PathVariable String name) {
         return new ResponseEntity<Interest>(interestService.getByName(name), HttpStatus.CREATED);

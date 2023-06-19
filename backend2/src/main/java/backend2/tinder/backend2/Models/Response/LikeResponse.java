@@ -24,5 +24,5 @@ public class LikeResponse {
     private LocalDateTime createdDate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime updatedDate;
-
+    private double distance;
 }

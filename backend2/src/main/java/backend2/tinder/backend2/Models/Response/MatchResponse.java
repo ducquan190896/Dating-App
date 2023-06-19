@@ -18,5 +18,6 @@ public class MatchResponse {
     private boolean isBlocked;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
-    
+    private double distance;
+    private Long chatId;
 }

@@ -62,6 +62,14 @@ public class LikeServiceIml  implements Likeservice{
         likedUsers.sort((a, b) -> b.getCreatedDate().compareTo(a.getCreatedDate()));
         return likedUsers;
     }
+    @Override
+    public List<Like> getByLikingUserIdForBlockCheck(long likingUserId) {
+        Users likingUser = userService.getUserById(likingUserId);
+        List<Like> likedUsers = likeRepos.findByLikingUser(likingUser);
+        likedUsers = likedUsers.stream().filter(lik -> lik.getLikedUser().getSuspended() == false).collect(Collectors.toList());
+        likedUsers.sort((a, b) -> b.getCreatedDate().compareTo(a.getCreatedDate()));
+        return likedUsers;
+    }
 
     @Override
     public boolean isExist(long likedUserId, long likingUserId) {

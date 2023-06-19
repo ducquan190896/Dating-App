@@ -51,6 +51,7 @@ public class SecurityConfig {
         .authorizeHttpRequests()
         .requestMatchers("/api/users/signIn").permitAll()
         .requestMatchers("/api/users/signup").permitAll()
+        .requestMatchers("/api/images/**").permitAll()
         .anyRequest().authenticated()
         .and()
         .addFilterBefore(exceptionFilter, authenticationFilter.getClass())
@@ -79,7 +80,11 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> {
-            web.ignoring().requestMatchers( "/api/users/signIn");
+            web
+            .ignoring()
+            .requestMatchers( "/api/users/signIn")
+            .requestMatchers("socket/**")
+            ;
         };
     }
 

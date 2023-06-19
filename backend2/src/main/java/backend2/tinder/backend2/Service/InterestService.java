@@ -14,4 +14,5 @@ public interface InterestService {
     Interest getById(Long id);
     List<Interest> getByUser(Long userId);
     List<Interest> addInterestToUser(InterestsRequest request);
+    void removeInterestFromUser(Long id);
 }

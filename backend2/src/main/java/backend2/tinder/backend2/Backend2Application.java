@@ -45,9 +45,9 @@ public class Backend2Application {
 			quan.getRoles().add(Role.USER);
 			Users khanh = new Users("khanh", new BCryptPasswordEncoder().encode("123456"), "khanh", "nguyen", GenderType.FEMALE, "hello i looking for a male partner", LocalDate.of(1996, Month.APRIL, 2), 65.0540746, 25.4554205);
 			khanh.getRoles().add(Role.USER);
-			Users duy = new Users("duy", new BCryptPasswordEncoder().encode("123456"), "duy", "doan", GenderType.MALE, "hello i looking for a female partner", LocalDate.of(2003, Month.APRIL, 2), 65.0104222, 25.4905775);
+			Users duy = new Users("duy", new BCryptPasswordEncoder().encode("123456"), "duy", "doan", GenderType.FEMALE, "hello i looking for a female partner", LocalDate.of(2003, Month.APRIL, 2), 65.0104222, 25.4905775);
 			duy.getRoles().add(Role.USER);
-			Users bo = new Users("bo", new BCryptPasswordEncoder().encode("123456"), "bo", "doan", GenderType.MALE, "hello i looking for a female partner", LocalDate.of(1985, Month.APRIL, 2), 64.9167, 25.5);
+			Users bo = new Users("bo", new BCryptPasswordEncoder().encode("123456"), "bo", "doan", GenderType.FEMALE, "hello i looking for a female partner", LocalDate.of(1985, Month.APRIL, 2), 64.9167, 25.5);
 			bo.getRoles().add(Role.USER);
 			Users my = new Users("my", new BCryptPasswordEncoder().encode("123456"), "my", "nguyen", GenderType.FEMALE, "hello i looking for a female partner", LocalDate.of(1997, Month.APRIL, 2), 60.2646166, 25.0862993);
 			my.getRoles().add(Role.USER);
@@ -57,7 +57,7 @@ public class Backend2Application {
 			userRepos.save(bo);
 			userRepos.save(my);
 
-			Preference preference1 = new Preference(100L, GenderType.FEMALE, 30, 20);
+			Preference preference1 = new Preference(1000L, GenderType.FEMALE, 30, 20);
 			preference1.setUser(quan);
 			Preference preference2 = new Preference(100L, GenderType.MALE, 30, 20);
 			preference2.setUser(khanh);

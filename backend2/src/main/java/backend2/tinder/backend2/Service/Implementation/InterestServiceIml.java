@@ -97,10 +97,33 @@ public class InterestServiceIml implements  InterestService{
                     interest.getUsers().add(authUser);
                     interest = interestRepos.save(interest);
                     authUser.getInterest().add(interest);
-               }				
+               }			
+               lists.add(interest);	
         });
         userRepos.save(authUser);
         return lists;
+    }
+    @Override
+    public void removeInterestFromUser(Long id) {
+        Users authUser = userService.getAuthUser();
+        // Optional<Interest> entity = interestRepos.findById(id);
+        // if(entity.isPresent()) {
+        //     Interest interest = entity.get();
+        //     interest.getUsers().remove(authUser);
+        //     interest = interestRepos.save(interest);
+
+        //     authUser.getInterest().remove(interest);
+        //     userRepos.save(authUser);
+        // }
+        // throw new EntityNotFoundException("the interest not found");
+
+        Interest interest = getById(id);
+        interest.getUsers().remove(authUser);
+        interest = interestRepos.save(interest);
+
+        authUser.getInterest().remove(interest);
+        userRepos.save(authUser);
+        
     }
 
 

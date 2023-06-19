@@ -1,0 +1,91 @@
+[
+    {
+        "id": 1,
+        "likedUser": {
+            "id": 2,
+            "username": "khanh",
+            "firstname": "khanh",
+            "surename": "nguyen",
+            "gender": "FEMALE",
+            "suspended": false,
+            "description": "hello i looking for a male partner",
+            "avatarUrls": [],
+            "roles": [
+                "USER"
+            ],
+            "birth": "1996-04-02",
+            "longitude": 25.4554205,
+            "latitude": 65.0540746,
+            "preference": {
+                "id": 2,
+                "distance": 100,
+                "genderOrientation": "MALE",
+                "maxAge": 30,
+                "minAge": 20
+            },
+            "interests": [
+                {
+                    "id": 1,
+                    "name": "jogging"
+                },
+                {
+                    "id": 2,
+                    "name": "panting"
+                },
+                {
+                    "id": 3,
+                    "name": "german language"
+                },
+                {
+                    "id": 4,
+                    "name": "shopping"
+                }
+            ]
+        },
+        "likingUser": {
+            "id": 1,
+            "username": "quan",
+            "firstname": "quan",
+            "surename": "doan",
+            "gender": "MALE",
+            "suspended": false,
+            "description": "hello i looking for a female partner",
+            "avatarUrls": [],
+            "roles": [
+                "USER"
+            ],
+            "birth": "1998-08-10",
+            "longitude": 25.4618881,
+            "latitude": 64.9942532,
+            "preference": {
+                "id": 1,
+                "distance": 1000,
+                "genderOrientation": "FEMALE",
+                "maxAge": 30,
+                "minAge": 20
+            },
+            "interests": [
+                {
+                    "id": 1,
+                    "name": "jogging"
+                },
+                {
+                    "id": 2,
+                    "name": "panting"
+                },
+                {
+                    "id": 3,
+                    "name": "german language"
+                },
+                {
+                    "id": 4,
+                    "name": "shopping"
+                }
+            ]
+        },
+        "matchId": 0,
+        "createdDate": "2023-06-01 15:58",
+        "updatedDate": "2023-06-01 15:58",
+        "blocked": false
+    }
+]
