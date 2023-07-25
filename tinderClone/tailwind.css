@@ -303,11 +303,6 @@
   border-color: rgb(156 163 175 / var(--tw-border-opacity))
 }
 
-.bg-\[\#3b82f6\] {
-  --tw-bg-opacity: 1;
-  background-color: rgb(59 130 246 / var(--tw-bg-opacity))
-}
-
 .bg-\[\#6203fc\] {
   --tw-bg-opacity: 1;
   background-color: rgb(98 3 252 / var(--tw-bg-opacity))
@@ -316,6 +311,11 @@
 .bg-\[\#d4bbfc\] {
   --tw-bg-opacity: 1;
   background-color: rgb(212 187 252 / var(--tw-bg-opacity))
+}
+
+.bg-\[\#f5738f\] {
+  --tw-bg-opacity: 1;
+  background-color: rgb(245 115 143 / var(--tw-bg-opacity))
 }
 
 .bg-gray-100 {
@@ -371,11 +371,6 @@
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
-}
-
-.bg-zinc-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(228 228 231 / var(--tw-bg-opacity))
 }
 
 .p-0 {

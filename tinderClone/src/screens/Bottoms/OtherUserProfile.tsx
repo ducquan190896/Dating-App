@@ -122,7 +122,7 @@ const OtherUserProfile = () => {
               </View>
             </View>
             <View style={tw('my-2 flex-row justify-center')}>
-              <EvilIcons name='location' size={30} color={"#6b7280"}></EvilIcons>
+              <EvilIcons name='location' size={30} color={"#6203fc"}></EvilIcons>
               <Text style={tw('ml-2 text-lg text-gray-500')}>{distance.toFixed(2)} km</Text>
             </View>
             <Text style={tw('ml-2 text-lg text-black')}>{user.description}</Text>

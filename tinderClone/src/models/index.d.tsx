@@ -163,6 +163,7 @@ export interface MESSAGEFORM {
 }
 export interface CHAT {
     id: number,
+    matchId: number,
     lastMessage: CHATMESSAGE | null,
     participants: PARTICIPANT[],
     dateCreated: string,

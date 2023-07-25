@@ -45,13 +45,14 @@ const SettingScreen = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-        headerTitle(props) {
+        headerTitle: (props) => {
             return (
               <TouchableOpacity onPress={() => setIsVisible(true)} style={tw('ml-16')}>
-                <Text style={tw('font-bold text-lg text-black')}>Edit Preference</Text>
+                <Text style={tw('font-bold text-lg text-[#6203fc]')}>Edit Preference</Text>
               </TouchableOpacity>
             )
         },
+        headerTintColor: "#6203fc"
     })
   }, [])
 
@@ -164,7 +165,7 @@ const SettingScreen = () => {
                         thumbProps={{
                           children: (
                             <View style={[tw('h-20 w-20'), {bottom: 10, right: 10}]}>
-                              <View style={[tw('h-8 w-8 rounded-full bg-green-500')]}></View>
+                              <View style={[tw('h-8 w-8 rounded-full bg-[#6203fc]')]}></View>
                               <Text style={tw('absolute -top-6 font-bold text-base')}>{distance}</Text>
                             </View>
                            
@@ -186,7 +187,7 @@ const SettingScreen = () => {
                         thumbProps={{
                           children: (
                             <View style={[tw('h-20 w-20'), {bottom: 10, right: 10}]}>
-                              <View style={[tw('h-8 w-8 rounded-full bg-green-500')]}></View>
+                              <View style={[tw('h-8 w-8 rounded-full bg-[#6203fc]')]}></View>
                               <Text style={tw('absolute -top-6 font-bold text-base')}>{maxAge}</Text>
                             </View>
                            
@@ -208,7 +209,7 @@ const SettingScreen = () => {
                         thumbProps={{
                           children: (
                             <View style={[tw('h-20 w-20'), {bottom: 10, right: 10}]}>
-                              <View style={[tw('h-8 w-8 rounded-full bg-green-500')]}></View>
+                              <View style={[tw('h-8 w-8 rounded-full bg-[#6203fc]')]}></View>
                               <Text style={tw('absolute -top-6 font-bold text-base')}>{minAge}</Text>
                             </View>
                            
@@ -217,10 +218,10 @@ const SettingScreen = () => {
                     />
                   </View>
                 </View> 
-                <TouchableOpacity style={[tw(' mx-auto px-10 py-2 rounded-full bg-green-500 mx-auto'), {width: 200}]} onPress={updateFunction}>
+                <TouchableOpacity style={[tw(' mx-auto px-10 py-2 rounded-full bg-[#6203fc] mx-auto'), {width: 200}]} onPress={updateFunction}>
                   <Text style={tw('mx-auto font-bold text-white text-lg')}>Update</Text>
                 </TouchableOpacity>     
-                <TouchableOpacity style={[tw('mx-auto px-10 py-2 mt-4 rounded-full bg-red-500 mx-auto'), {width: 200}]} onPress={closeModal}>
+                <TouchableOpacity style={[tw('mx-auto px-10 py-2 mt-4 rounded-full bg-[#f5738f] mx-auto'), {width: 200}]} onPress={closeModal}>
                   <Text style={tw('mx-auto font-bold text-white text-lg')}>Cancel</Text>
                 </TouchableOpacity>             
             </View>

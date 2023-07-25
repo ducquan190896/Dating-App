@@ -30,7 +30,7 @@ const MainStack = () => {
     <stack.Screen component={PreferenceForm} options={{headerShown: false}} name="PreferenceForm"></stack.Screen>
     <stack.Screen component={ChangePassword} options={{title: "back"}} name="ChangePassword"></stack.Screen>
     <stack.Screen component={BottomTabs} options={{headerShown: false}} name="BottomTabs"></stack.Screen>
-    <stack.Screen component={ConversationScreen} options={{headerShown: false}} name="ConversationScreen"></stack.Screen>
+    <stack.Screen component={ConversationScreen} options={{headerShown: false }} name="ConversationScreen"></stack.Screen>
    </stack.Navigator>
   )
 }

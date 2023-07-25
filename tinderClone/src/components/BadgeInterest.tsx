@@ -44,12 +44,14 @@ const BadgeInterest = ({interest, isOther}: {interest: Interest, isOther?: boole
     return (
         <View style={[tw('my-2 mx-2 relative'), {}]}>
           {isDelete && (
-            <TouchableOpacity disabled={isOther} onPress={deleteInterest} style={[tw('absolute -top-4 -right-4 rounded-full bg-red-500'), {zIndex: 10}]}>
+            <TouchableOpacity disabled={isOther} onPress={deleteInterest} style={[tw('absolute -top-4 -right-4 rounded-full bg-[#f5738f]'), {zIndex: 10}]}>
               <AntDesign name='close' size={20} color="white"></AntDesign>
             </TouchableOpacity>
           )}
           <TouchableOpacity disabled={isOther} onPress={() => setIsDelete(!isDelete)}>
-            <Badge value={interest.name} status="primary"  textStyle={tw(' font-bold text-white text-base')} containerStyle={tw('')} badgeStyle={tw('h-8')}/>
+            <View style={[tw('rounded-full bg-[#6203fc] items-center justify-center'), {marginBottom: 2, marginHorizontal: 2, padding: 6}]}>
+              <Text style={tw('text-white font-bold')}>{interest.name}</Text>
+            </View>
           </TouchableOpacity>
         </View>
       )

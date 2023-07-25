@@ -167,7 +167,7 @@ const PersonalProfile = () => {
           <AntDesign name='setting' size={34} color={"#6203fc"}></AntDesign>
         </View>
         <View style={[tw('flex-1'), {}]}>
-          <Text style={tw('text-lg font-bold text-gray-500')}>Setting</Text>
+          <Text style={tw('text-lg font-bold text-gray-500')}>Your Preference</Text>
         </View>
       </TouchableOpacity>
       <Modal visible={isVisible} animationType='slide' transparent={true}>

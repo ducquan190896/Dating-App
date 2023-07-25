@@ -11,7 +11,7 @@ import ChatReducer from './reducers/ChatReducer';
 import ReportReducer from './reducers/ReportReducer';
 import BlockReducer from './reducers/BlockReducer';
 
-export const HOST_URL= "http://100.76.188.137:8080";
+export const HOST_URL= "http://192.168.0.102:8080";
 const initialState= {};
 
 const rootReducer = combineReducers({

@@ -35,50 +35,55 @@ const BottomTabs = () => {
         >
             <tab.Screen 
                 options={{
-                headerShown: false,
-                tabBarIcon: ({color}) => (
-                    <AntDesign name="home" size={28} color={color} />
-                    )
+                    headerShown: false,
+                    tabBarIcon: ({color}) => (
+                        <AntDesign name="home" size={28} color={color} />
+                    ),
+                    unmountOnBlur: true
                 }} 
                 name="HomeScreen" 
                 component={HomeScreen}
             ></tab.Screen>
             <tab.Screen 
                 options={{
-                headerShown: false,
-                tabBarIcon: ({color}) => (
-                    <Entypo name="star" size={30} color={color} />
-                    )
+                    headerShown: false,
+                    tabBarIcon: ({color}) => (
+                        <Entypo name="star" size={30} color={color} />
+                    ),
+                    unmountOnBlur: true
                 }} 
                 name="LikeStack" 
                 component={LikeStack}
             ></tab.Screen>
             <tab.Screen 
                 options={{
-                headerShown: false,
-                tabBarIcon: ({color}) => (
-                    <Entypo name="heart" size={30} color={color} />
-                    )
+                    headerShown: false,
+                    tabBarIcon: ({color}) => (
+                        <Entypo name="heart" size={30} color={color} />
+                    ),
+                    unmountOnBlur: true
                 }} 
                 name="MatchesScreen" 
                 component={MatchesScreen}
             ></tab.Screen>
             <tab.Screen 
                 options={{
-                headerShown: false,
-                tabBarIcon: ({color}) => (
-                    <Ionicons name="chatbox" size={30} color={color} />
-                    )
+                    headerShown: false,
+                    tabBarIcon: ({color}) => (
+                        <Ionicons name="chatbox" size={30} color={color} />
+                    ),
+                    unmountOnBlur: true
                 }} 
                 name="ChatList" 
                 component={ChatList}
             ></tab.Screen>
              <tab.Screen 
                 options={{
-                headerShown: false,
-                tabBarIcon: ({color}) => (
-                    <Ionicons name="person" size={30} color={color} />
-                    )
+                    headerShown: false,
+                    tabBarIcon: ({color}) => (
+                        <Ionicons name="person" size={30} color={color} />
+                    ),
+                    unmountOnBlur: true
                 }} 
                 name="ProfileStack" 
                 component={ProfileStack}

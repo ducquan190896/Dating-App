@@ -47,13 +47,14 @@ const AccountDetailScreen = () => {
 
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerTitle(props) {
+            headerTitle: (props) => {
                 return (
                   <TouchableOpacity onPress={EditProfile} style={tw('ml-20')}>
-                    <Text style={tw('font-bold text-lg text-black')}>Edit Profile</Text>
+                    <Text style={tw('font-bold text-lg text-[#6203fc]')}>Edit Profile</Text>
                   </TouchableOpacity>
                 )
             },
+            headerTintColor: "#6203fc"
         })
     }, [])
 
@@ -171,10 +172,10 @@ const AccountDetailScreen = () => {
                   <Text style={tw('mb-2 text-black text-base')}>description</Text>
                   <TextInput value={description} placeholder="description" onChangeText={(text: string) => setDescription(text)} style={tw('w-full border border-gray-400 py-2 px-4 rounded-lg text-lg')}></TextInput> 
                 </View>      
-                <TouchableOpacity style={[tw(' mx-auto px-10 py-2 rounded-full bg-green-500 mx-auto'), {width: 200}]} onPress={updateProfileFunction}>
+                <TouchableOpacity style={[tw(' mx-auto px-10 py-2 rounded-full bg-[#6203fc] mx-auto'), {width: 200}]} onPress={updateProfileFunction}>
                   <Text style={tw('mx-auto font-bold text-white text-lg')}>Update Profile</Text>
                 </TouchableOpacity>     
-                <TouchableOpacity style={[tw('mx-auto px-10 py-2 mt-4 rounded-full bg-red-500 mx-auto'), {width: 200}]} onPress={closeProfileModal}>
+                <TouchableOpacity style={[tw('mx-auto px-10 py-2 mt-4 rounded-full bg-[#f5738f] mx-auto'), {width: 200}]} onPress={closeProfileModal}>
                   <Text style={tw('mx-auto font-bold text-white text-lg')}>Cancel</Text>
                 </TouchableOpacity>             
             </View>

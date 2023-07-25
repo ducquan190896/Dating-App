@@ -95,7 +95,7 @@ const LikingUsersScreen = () => {
 
 
   return (
-    <SafeAreaView style={tw('flex-1 bg-gray-100')}>
+    <SafeAreaView style={tw('flex-1 bg-white')}>
       <Text style={tw('text-2xl font-bold text-[#6203fc] my-2 ml-4 mx-auto')}>People Liked You</Text>
       <View style={[tw('flex-1 items-center justify-center w-full h-full '), {gap: 20}]}>
         <FlatList 
