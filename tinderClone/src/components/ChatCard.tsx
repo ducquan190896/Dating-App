@@ -18,6 +18,7 @@ const ChatCard = ({authUser, chat, navigation}: {authUser: USER, chat: CHAT, nav
   const dispatch = useDispatch();
   const [receiver, setReceiver] =  useState<PARTICIPANT | null>(null);
   const [authParticipant, setAuthParticipant] =  useState<PARTICIPANT | null>(null);
+  const image = receiver?.user?.avatarUrls && receiver?.user?.avatarUrls?.length > 0 && receiver?.user?.avatarUrls[0].startsWith("http") ? receiver?.user?.avatarUrls[0] : HOST_URL + "/api/images/image/" + receiver?.user?.avatarUrls[0];
   // const navigation = useNavigation<ChatListNavigationProp>();
 
   useEffect(() => {
@@ -43,7 +44,7 @@ const ChatCard = ({authUser, chat, navigation}: {authUser: USER, chat: CHAT, nav
 
 return (
   <TouchableOpacity onPress={navigateToConversationScreen} activeOpacity={0.3} style={tw('w-full border-b border-gray-300 flex-row items-center justify-between px-6 py-2')}>
-      <Image source={{uri: receiver?.user?.avatarUrls && receiver?.user?.avatarUrls?.length > 0 ?  HOST_URL + "/api/images/image/" + receiver?.user?.avatarUrls[0] : imageUrlsDefault}} style={[tw('rounded-full mr-4'), {width: 70, height: 70, resizeMode: 'cover'}]}></Image>   
+      <Image source={{uri: image ? image : imageUrlsDefault}} style={[tw('rounded-full mr-4'), {width: 70, height: 70, resizeMode: 'cover'}]}></Image>   
     
         <View style={tw('flex-1 items-start justify-start')}>
           <Text style={tw('text-lg font-bold')}>{receiver?.user?.username}</Text>

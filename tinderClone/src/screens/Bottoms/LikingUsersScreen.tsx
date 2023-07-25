@@ -69,8 +69,8 @@ const LikingUsersScreen = () => {
     }
 
     const handleRenderItem: ListRenderItem<any> = ({item}: {item: LIKE}) => (
-        <TouchableOpacity onPress={() => navigateToLikingUserProfile(item)} style={[tw(`bg-white rounded-md mx-2 my-2 ${item?.matchId != 0 ? "border border-2 border-[#6203fc]" :  "border border-2 border-red-500"}`), {width: 170}]}>
-             <Image source={{uri: item.likingUser.avatarUrls && item.likingUser.avatarUrls.length > 0 ? HOST_URL + "/api/images/image/" +  item.likingUser.avatarUrls[0] : imageUrlsDefault}} style={[tw('w-full rounded-md'), {height: 170}]}></Image>
+        <TouchableOpacity onPress={() => navigateToLikingUserProfile(item)} style={[tw(`bg-white rounded-md mx-2 my-2 ${item?.matchId != 0 ? "border border-4 border-[#6203fc]" :  "border border-4 border-[#8adff2]"}`), {width: 170}]}>
+             <Image source={{uri:  item?.likingUser?.avatarUrls?.length < 1 ? imageUrlsDefault : item.likingUser.avatarUrls[0].startsWith("http") ? item.likingUser.avatarUrls[0] : HOST_URL + "/api/images/image/" +  item.likingUser.avatarUrls[0]}} style={[tw('w-full'), {height: 170}]}></Image>
              <View style={tw('flex items-center justify-center')}>
                 <Text style={tw('mt-4 text-lg text-zinc-700 font-bold')}>{item?.likingUser?.firstname} {item?.likingUser?.surename}</Text>
                 <Text style={tw('text-lg text-zinc-700 font-bold')}>age: {getAge(item?.likingUser?.birth).toFixed(0)}</Text>
@@ -96,7 +96,7 @@ const LikingUsersScreen = () => {
 
   return (
     <SafeAreaView style={tw('flex-1 bg-gray-100')}>
-      <Text style={tw('text-2xl font-bold text-gray-500 my-2 ml-4')}>People Liked You</Text>
+      <Text style={tw('text-2xl font-bold text-[#6203fc] my-2 ml-4 mx-auto')}>People Liked You</Text>
       <View style={[tw('flex-1 items-center justify-center w-full h-full '), {gap: 20}]}>
         <FlatList 
             numColumns={2}

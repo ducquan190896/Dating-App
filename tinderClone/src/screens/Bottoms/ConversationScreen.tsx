@@ -216,7 +216,7 @@ const ConversationScreen = () => {
             <TouchableOpacity onPress={goback} style={tw('ml-2 mr-6')}>
                 <Ionicons name="arrow-back" size={34} color="#3b82f6" /> 
             </TouchableOpacity>
-            <Image source={{uri: receiver?.avatarUrls && receiver?.avatarUrls?.length > 0 ?  HOST_URL + "/api/images/image/" + receiver?.avatarUrls[0] : imageUrlsDefault}} style={[tw('rounded-full mr-2'), {width: 40, height: 40, resizeMode: 'cover'}]}></Image>
+            <Image source={{uri: receiver?.avatarUrls && receiver?.avatarUrls?.length > 0 && receiver?.avatarUrls[0].startsWith("http") ?  receiver?.avatarUrls[0] :  HOST_URL + "/api/images/image/" + receiver?.avatarUrls[0]}} style={[tw('rounded-full mr-2'), {width: 40, height: 40, resizeMode: 'cover'}]}></Image>
             <Text style={tw('text-2xl text-black')}>{receiver?.username}</Text>
             <View style={tw('flex-1 items-end')}>
                 <TouchableOpacity onPress={() => setVisible(prev => !prev)} style={[tw('w-6 h-6 rounded-full bg-[#3b82f6] items-center justify-center'), {padding: 2}]}>
@@ -243,7 +243,7 @@ const ConversationScreen = () => {
                 <TouchableWithoutFeedback  onPress={Keyboard.dismiss}>         
                     <>
                         <View style={tw('w-full py-2 flex-row items-center justify-center')}>
-                            {authUser && <Image style={[tw('w-10 h-10 rounded-full bg-white ml-2 mr-2'), {resizeMode: 'contain'}]} source={{uri: authUser?.avatarUrls && authUser?.avatarUrls?.length > 0 ?  HOST_URL + "/api/images/image/" + authUser?.avatarUrls[0] : imageUrlsDefault}}></Image>}
+                            {authUser && <Image style={[tw('w-10 h-10 rounded-full bg-white ml-2 mr-2'), {resizeMode: 'contain'}]} source={{uri: authUser?.avatarUrls && authUser?.avatarUrls?.length > 0 && authUser?.avatarUrls[0].startsWith("http") ?  authUser?.avatarUrls[0] : HOST_URL + "/api/images/image/" + authUser?.avatarUrls[0]}}></Image>}
                             <TextInput editable={isblocked ? false : true} value={messageInput} onChangeText={(text: string) => setMessageInput(text)} placeholder='your comment'  style={tw('flex-1  text-base bg-gray-300 rounded-full py-2 px-6')} ></TextInput>
                             <TouchableOpacity disabled={isblocked} onPress={addMessageFunction}  style={tw('mx-2')}>
                                 <Ionicons name="send-sharp" size={24} color="#3b82f6" />

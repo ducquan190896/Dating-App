@@ -91,7 +91,7 @@ public class ViewServiceIml implements ViewService{
     }
 
     private double calculateDistanceScore(double distance) {
-        double score = 100 - (distance * 5);
+        double score = 100 - (distance * 1);
         
         return score > 0 ? score : 0;
     }

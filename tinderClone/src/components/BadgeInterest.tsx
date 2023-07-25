@@ -12,7 +12,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
-const BadgeInterest = ({interest}: {interest: Interest}) => {
+const BadgeInterest = ({interest, isOther}: {interest: Interest, isOther?: boolean}) => {
     const dispatch = useDispatch();
     const tw = useTailwind();
     const {users, authUser, authError, authSuccess} = useSelector((state: RootState) => state.USERS);
@@ -44,11 +44,11 @@ const BadgeInterest = ({interest}: {interest: Interest}) => {
     return (
         <View style={[tw('my-2 mx-2 relative'), {}]}>
           {isDelete && (
-            <TouchableOpacity onPress={deleteInterest} style={[tw('absolute -top-4 -right-4 rounded-full bg-red-500'), {zIndex: 10}]}>
+            <TouchableOpacity disabled={isOther} onPress={deleteInterest} style={[tw('absolute -top-4 -right-4 rounded-full bg-red-500'), {zIndex: 10}]}>
               <AntDesign name='close' size={20} color="white"></AntDesign>
             </TouchableOpacity>
           )}
-          <TouchableOpacity onPress={() => setIsDelete(!isDelete)}>
+          <TouchableOpacity disabled={isOther} onPress={() => setIsDelete(!isDelete)}>
             <Badge value={interest.name} status="primary"  textStyle={tw(' font-bold text-white text-base')} containerStyle={tw('')} badgeStyle={tw('h-8')}/>
           </TouchableOpacity>
         </View>

@@ -15,7 +15,7 @@ const MessageItem = ({message}: {message: CHATMESSAGE}) => {
     const tw = useTailwind()
     const {authUser} = useSelector((state: RootState) => state.USERS)
     const [isAuthUser, setIsAuthUser] =  useState<boolean>(message?.participant?.user?.id == authUser.id ? true: false)
-
+    const image = message?.participant?.user?.avatarUrls?.length > 0 && message?.participant?.user?.avatarUrls[0].startsWith("http") ? message?.participant?.user?.avatarUrls[0] : HOST_URL + "/api/images/image/" + message?.participant?.user?.avatarUrls[0]; 
   return (
     <>
         {isAuthUser ? (
@@ -24,13 +24,13 @@ const MessageItem = ({message}: {message: CHATMESSAGE}) => {
                     <View style={tw('p-2 rounded-lg bg-gray-300')}>
                         <Text style={tw('text-base text-black')}>{message?.content}</Text>
                     </View>
-                    <Image source={{uri: message?.participant?.user?.avatarUrls && message?.participant?.user?.avatarUrls?.length > 0 ? HOST_URL + "/api/images/image/" + message?.participant?.user?.avatarUrls[0] : imageUrlsDefault}} style={[tw('rounded-full ml-2 mr-2'), {width: 40, height: 40, resizeMode: 'cover'}]}></Image>  
+                    <Image source={{uri:  image ? image : imageUrlsDefault}} style={[tw('rounded-full ml-2 mr-2'), {width: 40, height: 40, resizeMode: 'cover'}]}></Image>  
                 </View>
             </View>
         ) : (
             <View style={tw('w-full')}>
                 <View style={[tw('w-2/3 my-2 flex flex-row items-center justify-start'), {alignSelf: 'flex-start'}]}>
-                    <Image  source={{uri: message?.participant?.user?.avatarUrls && message?.participant?.user?.avatarUrls?.length > 0 ? HOST_URL + "/api/images/image/" + message?.participant?.user?.avatarUrls[0] : imageUrlsDefault}} style={[tw('rounded-full ml-2 mr-2'), {width: 40, height: 40, resizeMode: 'cover'}]}></Image>  
+                    <Image  source={{uri: image ? image : imageUrlsDefault}} style={[tw('rounded-full ml-2 mr-2'), {width: 40, height: 40, resizeMode: 'cover'}]}></Image>  
                     <View style={tw('p-2 rounded-lg bg-gray-300')}>
                         <Text style={tw('text-base text-black')}>{message?.content}</Text>
                     </View>

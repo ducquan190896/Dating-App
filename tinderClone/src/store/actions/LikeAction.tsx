@@ -46,7 +46,28 @@ export const getLikeByLikedUserAndAuth = (likedUser: number, likingUser: number)
        })
    }  
  }
- export const checkLikeExistByLikedUserAndAuth = (likedUser: number, likingUser: number) => async (dispatch: Dispatch<ACTION>, getState: any) => {
+//  export const checkLikeExistByLikedUserAndAuth = async (likedUser: number, likingUser: number) => async (dispatch: Dispatch<ACTION>, getState: any) => {
+//     try {
+//        const token : string | null = await AsyncStorage.getItem("token");  
+//        const res = await axios.get(HOST_URL + `/api/likes/isExist/likedUser/${likedUser}/likingUser/${likingUser}`, {
+//            headers: {
+//                "Authorization": token ?? ""
+//            }
+//        })
+//        const data = await res.data
+//        console.log(data);
+//        dispatch({
+//            type: "check_exist_by_likedUser_and_auth",
+//            payload: data
+//        })
+//    } catch (err) {
+//        dispatch({
+//            type: "LIKE_ERROR",
+//            payload: err
+//        })
+//    }  
+//  }
+export const checkLikeExistByAuthAndLikingUser= async (likedUser: number, likingUser: number)  => {
     try {
        const token : string | null = await AsyncStorage.getItem("token");  
        const res = await axios.get(HOST_URL + `/api/likes/isExist/likedUser/${likedUser}/likingUser/${likingUser}`, {
@@ -56,15 +77,9 @@ export const getLikeByLikedUserAndAuth = (likedUser: number, likingUser: number)
        })
        const data = await res.data
        console.log(data);
-       dispatch({
-           type: "check_exist_by_likedUser_and_auth",
-           payload: data
-       })
+       return data;
    } catch (err) {
-       dispatch({
-           type: "LIKE_ERROR",
-           payload: err
-       })
+        console.log(err);
    }  
  }
  export const addLikeAction = (likedUser: number) => async (dispatch: Dispatch<ACTION>, getState: any) => {

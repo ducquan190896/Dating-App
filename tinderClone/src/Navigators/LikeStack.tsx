@@ -19,7 +19,7 @@ const LikeStack = () => {
     return (
         <stack.Navigator initialRouteName='LikingUsersScreen'>
          <stack.Screen component={LikingUsersScreen} options={{headerShown: false}} name="LikingUsersScreen"></stack.Screen>
-         <stack.Screen component={OtherUserProfile} name="OtherUserProfile" options={{title: ""}}></stack.Screen>
+         <stack.Screen component={OtherUserProfile} name="OtherUserProfile" options={{headerShown: false}}></stack.Screen>
         </stack.Navigator>
        )
 }

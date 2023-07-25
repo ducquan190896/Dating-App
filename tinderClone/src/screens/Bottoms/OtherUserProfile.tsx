@@ -84,11 +84,14 @@ const OtherUserProfile = () => {
   }, [like, addLikeAction])
 
   return (
-    <SafeAreaView style={tw('flex-1 bg-white p-0')}>
+    <SafeAreaView style={tw('flex-1 bg-white p-0 relative')}>
+       <TouchableOpacity onPress={() => navigation.goBack()} style={[tw('bg-white absolute rounded-full p-2 items-center justify-center'), {top: 8, left: 8, zIndex: 10}]}>
+          <AntDesign name='arrowleft' size={30} color={"#6203fc"}></AntDesign>
+       </TouchableOpacity>
       <ScrollView>
         <View style={tw('flex-1 bg-white items-center justify-start py-0 mt-0')}>
           <PagerView 
-                style={[tw('mb-2 mt-0 py-0'), { width: windownWith, height: 320}]} 
+                style={[tw('mb-2 mt-0 py-0'), { width: windownWith, height: 450}]} 
                 initialPage={0}
                 onPageSelected={(e) => {
                   console.log(e.nativeEvent);
@@ -97,22 +100,24 @@ const OtherUserProfile = () => {
               >
                 {user?.avatarUrls?.length > 0 ? (
                   user?.avatarUrls?.map((item: string, index: number ) => (
-                    <Image key={index} source={{uri: HOST_URL + "/api/images/image/" + item}} style={[tw(''), {width: windownWith, height: 320, resizeMode: 'cover'}]}></Image>  
+                    <Image key={index} source={{uri: item.startsWith("http") ? item : HOST_URL + "/api/images/image/" + item}} style={[tw(''), {width: windownWith, height: 500, resizeMode: 'cover'}]}></Image>  
                   ))
                 ): (
                   imageUrlsDefaults.map((item: string, index: number ) => (
-                    <Image key={index} source={{uri: item}} style={[tw(''), {width: windownWith, height: 320, resizeMode: 'cover'}]}></Image>  
+                    <Image key={index} source={{uri: item}} style={[tw(''), {width: windownWith, height: 500, resizeMode: 'cover'}]}></Image>  
                   ))
                 )}
           </PagerView>
-          <HomeCardDots arrayLength={user?.avatarUrls?.length > 0 ? user?.avatarUrls?.length : imageUrlsDefaults.length} activeIndex={activeIndex}></HomeCardDots>
+          {user?.avatarUrls?.length > 1 && (
+            <HomeCardDots arrayLength={user?.avatarUrls?.length > 0 ? user?.avatarUrls?.length : imageUrlsDefaults.length} activeIndex={activeIndex}></HomeCardDots>
+          )}
           <View style={tw('w-full mb-2 flex items-start justify-center px-4')}>
             <View style={tw('my-2 mt-4 flex-row justify-center items-center')}>
               <Text style={tw('mr-6 text-2xl text-black font-bold')}>{user.firstname} {user.surename}</Text>
               <Text style={tw('mr-10 text-2xl text-gray-500 font-bold')}>{getAge(user?.birth).toFixed(0)}</Text>
               <View style={tw('flex-1 items-end mr-6')}>
                 <TouchableOpacity onPress={LikeUserFunction}>
-                    <AntDesign name='heart' size={30} color={match != null ? "#ef4444" : "gray"}></AntDesign>
+                    <AntDesign name='heart' size={30} color={match != null ? "#6203fc" : "#d1d5db"}></AntDesign>
                   </TouchableOpacity>
               </View>
             </View>
@@ -122,7 +127,7 @@ const OtherUserProfile = () => {
             </View>
             <Text style={tw('ml-2 text-lg text-black')}>{user.description}</Text>
             <View style={[tw('flex flex-row w-full'), {flexWrap: 'wrap'}]}>
-              {user && user?.interests && user?.interests.length > 0 && user.interests.map((interest: Interest) => <BadgeInterest key={interest.id}  interest={interest}></BadgeInterest>)}
+              {user && user?.interests && user?.interests.length > 0 && user.interests.map((interest: Interest) => <BadgeInterest key={interest.id}  interest={interest} isOther={true}></BadgeInterest>)}
             </View>
           </View>
           <View style={tw('w-full flex items-start justify-center px-2 my-2 mx-auto')}>
@@ -132,7 +137,7 @@ const OtherUserProfile = () => {
                     {user?.avatarUrls && user?.avatarUrls.length > 0 && user?.avatarUrls.map((item: string, index) => {
                       return (
                         <View key={index} style={tw('mr-4 mb-4 my-2')}>
-                          <Image source={{uri: HOST_URL + "/api/images/image/" +  item}} style={[tw('rounded-md'), {height: 100, width: 100, resizeMode: 'center'}]}></Image>  
+                          <Image source={{uri: item.startsWith("http") ? item : HOST_URL + "/api/images/image/" +  item}} style={[tw('rounded-md'), {height: 100, width: 100, resizeMode: 'center'}]}></Image>  
                         </View>
                       )
                     })}

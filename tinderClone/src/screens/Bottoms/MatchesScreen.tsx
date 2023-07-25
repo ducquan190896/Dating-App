@@ -69,9 +69,10 @@ const MatchesScreen = () => {
 
     const handleRenderItem: ListRenderItem<any> = ({item}: {item: MATCH}) => {
         const matchUser = authUser && authUser?.id == item?.user1?.id ? item?.user2 : item?.user1;
+        const image = matchUser.avatarUrls && matchUser.avatarUrls.length > 0 && matchUser.avatarUrls[0].startsWith("http") ? matchUser.avatarUrls[0]  : HOST_URL + "/api/images/image/" +  matchUser.avatarUrls[0];
         return (
-            <TouchableOpacity onPress={() =>  navigation.navigate('ConversationScreen', {matchId: item.id})} style={[tw('bg-white rounded-md mx-2 my-2 border border-2 border-[#6203fc]'), {width: 170}]}>
-                <Image source={{uri: matchUser.avatarUrls && matchUser.avatarUrls.length > 0 ? HOST_URL + "/api/images/image/" +  matchUser.avatarUrls[0] : imageUrlsDefault}} style={[tw('w-full rounded-md'), {height: 170}]}></Image>
+            <TouchableOpacity onPress={() =>  navigation.navigate('ConversationScreen', {matchId: item.id})} style={[tw('bg-white rounded-md mx-2 my-2 border border-4 border-[#6203fc]'), {width: 170}]}>
+                <Image source={{uri: image ? image : imageUrlsDefault}} style={[tw('w-full'), {height: 170}]}></Image>
                 <View style={tw('flex items-center justify-center')}>
                     <Text style={tw('mt-4 text-lg text-zinc-700 font-bold')}>{matchUser.firstname} {matchUser.surename}</Text>
                     <Text style={tw('text-lg text-zinc-700 font-bold')}>age: {getAge(matchUser.birth).toFixed(0)}</Text>
@@ -98,7 +99,7 @@ const MatchesScreen = () => {
 
   return (
     <SafeAreaView style={tw('flex-1 bg-gray-100')}>
-      <Text style={tw('text-2xl font-bold text-gray-500 my-2 ml-4')}>Your Matches</Text>
+      <Text style={tw('text-2xl font-bold text-[#6203fc] my-2 ml-4 mx-auto ')}>Your Matchings</Text>
       <View style={[tw('flex-1 items-center justify-center w-full h-full '), {gap: 20}]}>
         <FlatList 
             numColumns={2}

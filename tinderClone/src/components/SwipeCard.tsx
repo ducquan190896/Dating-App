@@ -27,6 +27,7 @@ const SwipeCard = ({card}: {card: VIEWER}) => {
     const age = (today - birthDate)/ (1000 * 60 * 60 *24 * 365);
     const randomIndex = Math.floor(Math.random() * imageUrlsDefault.length)
     const defaultImage = imageUrlsDefault[randomIndex]
+    const image = card?.avatarUrls?.length > 0 && card?.avatarUrls[0].startsWith("http") ? card?.avatarUrls[0] : HOST_URL + "/api/images/image/" + card?.avatarUrls[0]; 
     if(card == null) {
         return (
             <View style={[tw('relative bg-gray-200  rounded-md w-full'), {height: 600}]}>
@@ -37,7 +38,7 @@ const SwipeCard = ({card}: {card: VIEWER}) => {
 
   return (
     <View style={[tw('relative bg-gray-200  rounded-md w-full'), {height: 600}]}>
-        <Image source={{uri: card.avatarUrls && card.avatarUrls.length > 0 ? HOST_URL + "/api/images/image/" + card.avatarUrls[0] : defaultImage}} style={[tw('w-full absolute -top-4 rounded-md'), {height: "90%"}]}></Image> 
+        <Image source={{uri: image ? image : defaultImage}} style={[tw('w-full absolute -top-4 rounded-md'), {height: "90%"}]}></Image> 
         <View style={tw('absolute bottom-0 bg-white w-full flex flex-row items-center justify-center px-6 my-2')}>
             <View style={[tw('absolute -top-4 py-2 px-8 bg-[#6203fc] rounded-full'), {zIndex: 10}]}>
                 <Text style={tw('text-white font-bold')}>{card.matchingRate.toFixed(2)}% Match</Text>

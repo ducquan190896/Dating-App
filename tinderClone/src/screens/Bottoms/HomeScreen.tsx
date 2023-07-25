@@ -14,9 +14,9 @@ import Swiper from 'react-native-deck-swiper';
 import SwipeCard from '../../components/SwipeCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { getViewers } from '../../store/actions/ViewAction';
-import { RootState } from '../../store/store';
+import { HOST_URL, RootState } from '../../store/store';
 import { VIEWER } from '../../models/index.d';
-import { addLikeAction, resetLikeAction } from '../../store/actions/LikeAction';
+import { addLikeAction, checkLikeExistByAuthAndLikingUser, resetLikeAction } from '../../store/actions/LikeAction';
 import LoadingComponent from '../../components/LoadingComponent';
 
 type MainHomeNavigationProp = CompositeNavigationProp<
@@ -30,15 +30,17 @@ const HomeScreen = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const [isSwipeRight, setIsSwipeRight] = useState<boolean>(false);
+    const [likedUser, setLikeUser] = useState<VIEWER | null>(null);
     const [matchId, setMatchId] = useState<number>(0);
     const navigation = useNavigation<MainHomeNavigationProp>();
     const tw = useTailwind();
     const {viewers, viewSuccess, viewError} = useSelector((state: RootState) => state.VIEWS);
+    const {authUser} = useSelector((state: RootState) => state.USERS);
     const [isCard, setIsCard] = useState<boolean>(false);
     const SwifRef = useRef<any>(null);
     const dispatch = useDispatch();
     const {like, likeSuccess, likeError} = useSelector((state: RootState) => state.LIKES)
-  
+
     const swipeLeft = (cardIndex: number) => {
       if(viewers && cardIndex >= viewers.length) {
         setIsCard(true);
@@ -53,7 +55,16 @@ const HomeScreen = () => {
       } else {
         console.log("viewers length: " + viewers.length);
         console.log(cardIndex)
-        dispatch(addLikeAction(viewers[cardIndex].id) as any);
+        const likedUser = viewers[cardIndex]
+        await dispatch(addLikeAction(likedUser.id) as any);
+        const isLikeExist = await checkLikeExistByAuthAndLikingUser(authUser?.id , likedUser.id)
+        if(isLikeExist == true) {
+          setLikeUser(likedUser);
+          setIsVisible(true);
+        } else {
+          setLikeUser(null);
+          setIsVisible(false)
+        }
         setIsSwipeRight(true);
       }
     }
@@ -82,23 +93,25 @@ const HomeScreen = () => {
     }, [])
     
     useEffect(() => {
-      if(like && like.matchId != 0 && isSwipeRight) {
-        console.log("like " +  like)
-        setIsVisible(true);
+      if(likedUser && like && like.matchId != 0 && isSwipeRight) {
+        // console.log("like " +  like)
+        // setIsVisible(true);
         setMatchId(like?.matchId)
         dispatch(resetLikeAction() as any);
       }
      
-    }, [like, swipeRight])
+    }, [like, swipeRight, likedUser])
 
     const sendMessageFunction = () => {
       if(matchId == 0) {
         return;
       }
       setIsVisible(false);
+      setLikeUser(null);
       // navigate to chat room screen by matchId params
       navigation.navigate('ConversationScreen', {matchId: matchId})
       setIsSwipeRight(false);
+      setMatchId(0);
     }
 
     if(isLoading) {
@@ -147,36 +160,40 @@ const HomeScreen = () => {
             <TouchableOpacity onPress={() => SwifRef.current.swipeLeft()} style={tw('bg-red-200 p-2 rounded-full')}>
               <AntDesign name="close" size={30} color="red" />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => SwifRef.current.swipeRight()} style={tw('bg-green-200 p-2 rounded-full')}>
-            <AntDesign name="heart" size={30} color="green" />
+            <TouchableOpacity onPress={() => SwifRef.current.swipeRight()} style={tw('bg-[#d4bbfc] p-2 rounded-full')}>
+            <AntDesign name="heart" size={30} color="#6203fc" />
             </TouchableOpacity>
         </View>
-        <Modal visible={isVisible} animationType='slide'>
-            <View style={tw('flex-1')}>
-              <ImageBackground 
-              source={{uri: imageUrlsDefault}} 
-              resizeMode='cover' 
-              style={[tw('flex-1  items-center justify-end pb-10'), {overflow: 'hidden'}]}
-              blurRadius={1}
-              >
-                
-                <Text style={tw('text-4xl font-bold text-green-400 mb-10')}>MATCH</Text>
-                <TouchableOpacity style={tw('px-10 py-2 rounded-full bg-red-500 mb-4')} onPress={sendMessageFunction}>
-                  <Text style={tw('font-bold text-white text-lg')}>SEND MESSAGE</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  style={tw('px-10 py-2 rounded-full bg-red-500')} 
-                  onPress={() => {
-                    setIsVisible(false);
-                    setIsSwipeRight(false);
-                    }}
+        {likedUser && isVisible && (
+          <Modal visible={isVisible} animationType='slide'>
+              <View style={tw('flex-1')}>
+                <ImageBackground 
+                source={{uri: likedUser?.avatarUrls[0].startsWith("http") ? likedUser.avatarUrls[0] : HOST_URL + "/api/images/image/" + likedUser.avatarUrls[0]}} 
+                resizeMode='cover' 
+                style={[tw('flex-1  items-center justify-end pb-10'), {overflow: 'hidden'}]}
+                blurRadius={1}
                 >
-                  <Text style={tw('font-bold text-white text-lg')}>KEEP SWIPING</Text>
-                </TouchableOpacity>
-              </ImageBackground>
-              
-            </View>
-        </Modal>
+                  
+                  <Text style={tw('text-4xl font-bold text-green-400 mb-10')}>MATCH</Text>
+                  <TouchableOpacity style={tw('px-10 py-2 rounded-full bg-[#6203fc] mb-4')} onPress={sendMessageFunction}>
+                    <Text style={tw('font-bold text-white text-lg')}>SEND MESSAGE</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    style={tw('px-10 py-2 rounded-full bg-[#6203fc]')} 
+                    onPress={() => {
+                      setIsVisible(false);
+                      setIsSwipeRight(false);
+                      setLikeUser(null);
+                      setMatchId(0);
+                    }}
+                  >
+                    <Text style={tw('font-bold text-white text-lg')}>KEEP SWIPING</Text>
+                  </TouchableOpacity>
+                </ImageBackground>
+                
+              </View>
+          </Modal>  
+        )}
     </SafeAreaView>
     )
 }

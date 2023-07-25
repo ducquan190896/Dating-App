@@ -65,7 +65,7 @@ const PersonalProfile = () => {
   const handleRenderItem: ListRenderItem<any> = ({item}: {item: string}) => {
     return (
       <TouchableOpacity onPress={() => openDeleteModal(item)} style={tw('mr-4 mb-4')}>
-        <Image source={{uri: HOST_URL + "/api/images/image/" +  item}} style={[tw('rounded-md'), {height: 100, width: 100}]}></Image>  
+        <Image source={{uri: item.startsWith("http") ? item : HOST_URL + "/api/images/image/" +  item}} style={[tw('rounded-md'), {height: 100, width: 100}]}></Image>  
       </TouchableOpacity>
     )
   }
@@ -127,14 +127,14 @@ const PersonalProfile = () => {
 
   return (
     <SafeAreaView style={tw('flex-1 bg-white items-center justify-start pt-4 pb-2 px-2')}>
-      <Image source={{uri: authUser.avatarUrls && authUser.avatarUrls.length > 0 ? HOST_URL + "/api/images/image/" + authUser.avatarUrls[0] : imageUrlsDefault}} style={[tw(' rounded-full'), {height: 200, width: 200}]}></Image>
+      <Image source={{uri: authUser?.avatarUrls && authUser?.avatarUrls?.length < 1 ? imageUrlsDefault : authUser?.avatarUrls[0].startsWith("http") ? authUser?.avatarUrls[0] : HOST_URL + "/api/images/image/" + authUser.avatarUrls[0]}} style={[tw(' rounded-full'), {height: 200, width: 200}]}></Image>
       <Text style={tw('my-2 text-2xl text-black font-bold')}>{authUser.firstname} {authUser.surename}</Text>
       <View style={tw('w-full flex items-start justify-center px-2 my-2')}>
         <View style={tw('flex-row items-center mb-2')}>
           <Text style={tw('my-2 mr-4 text-lg text-gray-500 font-bold')}>My Photos</Text>
           {authUser?.avatarUrls?.length < 6 && (
               <TouchableOpacity onPress={uploadImageFunction}>
-                <AntDesign name='addfolder' size={28} color={"#ef4444"}></AntDesign>
+                <AntDesign name='addfolder' size={28} color={"#6203fc"}></AntDesign>
               </TouchableOpacity>
           )}
         </View>

@@ -30,12 +30,12 @@ export default (state: declaredStateLike = initialState, action: ACTION) => {
                 like: action.payload,
                 likeSuccess: true
             }
-        case "check_exist_by_likedUser_and_auth":
-            return {
-                ...state,
-                isExist: action.payload,
-                likeSuccess: true
-            }
+        // case "check_exist_by_likedUser_and_auth":
+        //     return {
+        //         ...state,
+        //         isExist: action.payload,
+        //         likeSuccess: true
+        //     }
         case "LIKE_ERROR":
             return {
                 ...state,
