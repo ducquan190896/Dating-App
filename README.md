@@ -1,4 +1,4 @@
-# Tinder-App
+# Tinder Clone
 A dating app gets inspired by Tinder, users can use the app to find best matching according to personal preferences, age, gender, and geographical distance. Additionally, users can chat with each other in real-time and End-To-End encryption is also applied in messaging functionality to maintain high security.
 
 # Video demo
