@@ -70,4 +70,8 @@ public class UserController {
     public ResponseEntity<UserResponse> removeImage(@RequestParam(required = false) String firstname, @RequestParam(required = false) String surename, @RequestParam(required = false) String description) {
         return new ResponseEntity<UserResponse>(userService.updateProfile(firstname, surename, description), HttpStatus.OK);
     }
+    @PutMapping("/authUser/updatePublicKey/{publicKey}")
+    public ResponseEntity<UserResponse> updatePublicKey(@PathVariable String publicKey) {
+        return new ResponseEntity<UserResponse>(userService.updatePublicKey(publicKey), HttpStatus.OK);
+    }
 }

@@ -25,6 +25,7 @@ public class UserSignUp {
     private double longitude;
     private double latitude;
     private List<String> interests;
+    private String publicKey;
 
     public UserSignUp(String username, String password, String firstname, String surename, GenderType gender, String description, LocalDate birth, double longitude, double latitude ) {
         this.username = username;
@@ -38,8 +39,7 @@ public class UserSignUp {
         this.latitude = latitude;
     }
 
-    public UserSignUp(String username, String password, String firstname, String surename, GenderType gender,
-            String description, LocalDate birth, double longitude, double latitude, List<String> interests) {
+    public UserSignUp(String username, String password, String firstname, String surename, GenderType gender, String description, LocalDate birth, double longitude, double latitude, List<String> interests) {
         this.username = username;
         this.password = password;
         this.firstname = firstname;
@@ -52,6 +52,31 @@ public class UserSignUp {
         this.interests = interests;
     }
 
-    
+    public UserSignUp(String username, String password, String firstname, String surename, GenderType gender, String description, LocalDate birth, double longitude, double latitude, String publicKey ) {
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.surename = surename;
+        this.gender = gender;
+        this.description = description;
+        this.birth = birth;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.publicKey = publicKey;
+    }
+
+    public UserSignUp(String username, String password, String firstname, String surename, GenderType gender, String description, LocalDate birth, double longitude, double latitude, List<String> interests, String publicKey) {
+        this.username = username;
+        this.password = password;
+        this.firstname = firstname;
+        this.surename = surename;
+        this.gender = gender;
+        this.description = description;
+        this.birth = birth;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.interests = interests;
+        this.publicKey = publicKey;
+    }
     
 }

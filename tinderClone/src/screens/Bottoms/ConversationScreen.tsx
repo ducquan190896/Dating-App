@@ -23,10 +23,12 @@ import { getChatByAuthUserAndReceiverAction, getChatByIdAction, getChatByMatchAc
 import { BottomTabProps } from '../../Navigators/BottomTabs';
 import LoadingComponent from '../../components/LoadingComponent';
 import SockJS from "sockjs-client";
-import {over} from "stompjs"
+import {Client, over} from "stompjs"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { addReportAction, checkReportByReportedUserIdAction } from '../../store/actions/ReportAction';
 import { addBlockAction, checkBlockExistByBlockedUserAndAuthAction } from '../../store/actions/BlockAction';
+import { createShareKey, decrypt, encrypt } from '../../Utils/EndToEndEcryption';
+import { addMessageAction, getAllMessagesByChatIDAction, messageResetAction, receiveMessageFromSocket } from '../../store/actions/MessageAction';
 
 type ConversationScreenNavigationProp = CompositeNavigationProp<
 NativeStackNavigationProp<RootStackParamList, "ConversationScreen">,
@@ -34,18 +36,16 @@ NativeStackNavigationProp<BottomTabProps>
 >;
 type ConversationScreenRouteProp = RouteProp<RootStackParamList, "ConversationScreen">;
 
-const imageUrlsDefault =   "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80";
 
 const ConversationScreen = () => {
-    const [messageList, setMessageList] = useState<CHATMESSAGE[] | []>([])
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
     const {authUser} = useSelector((state: RootState) => state.USERS);
     const {chats, chat, chatError, chatSuccess} = useSelector((state: RootState) => state.CHATS);
+    const {chatMessages, chatMessage} = useSelector((state: RootState) => state.MESSAGES);
     const {report, isReported} = useSelector((state: RootState) => state.REPORTS);
     const {block, isblocked} = useSelector((state: RootState) => state.BLOCKS);
     const tw = useTailwind();
-    const windownWith = useWindowDimensions().width;
     const dispatch = useDispatch();
     const navigation = useNavigation<ConversationScreenNavigationProp>();
     const {params} = useRoute<ConversationScreenRouteProp>();
@@ -56,41 +56,16 @@ const ConversationScreen = () => {
     const [messageInput, setMessageInput] = useState<string>("")
     const [stompClient, setStompClient] = useState<any | null>(null);
     const [visible, setVisible] = useState<boolean>(false);
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener("focus", () => {
-            setMessageList([]);
-        });
-        return unsubscribe;
-    }, [navigation])
   
     const loadChatMessages = useCallback(async () => {
-        if (chat) {
+        if (chat && receiver && authUser) {
             setIsRefreshing(true)
-            try {
-                    const token = await AsyncStorage.getItem("token")
-                    const res = await fetch(HOST_URL + `/api/messages/chat/${chat?.id}`, {
-                        method: "GET",
-                        headers: {
-                            "Authorization": token ?? ""
-                        }
-                    })
-                    const data = await res.json()
-                    console.log("get_messages_of_chat")
-                    console.log(data)
-                    setMessageList(data);
-            } catch (err) {
-                dispatch({
-                    type: "error_message",
-                    payload: err
-                })
-            }
+            dispatch(getAllMessagesByChatIDAction(chat?.id, receiver) as any);
             setIsRefreshing(false)
         }
-    }, [chat,  messageList])
+    }, [chat, chatMessages, receiver, authUser])
 
     const loadChat = useCallback(async () => {
-        setMessageList([])
         if(authUser && chatId) {
             setIsRefreshing(true);
             await dispatch(getChatByIdAction(chatId) as any);
@@ -120,11 +95,10 @@ const ConversationScreen = () => {
     )
 
     useEffect(() => {
+        dispatch(messageResetAction() as any);
         setIsLoading(true);
-        setMessageList([]);
-        loadChat();
+        loadChat()
     }, [authUser, dispatch, chatId, matchId])
-
 
     useEffect(() => {
         loadChatMessages().then(() => setIsLoading(false));
@@ -143,7 +117,7 @@ const ConversationScreen = () => {
 
     useEffect(() => {
         scrollRef?.current?.scrollToEnd()
-    }, [messageList])
+    }, [chatMessages])
 
 
     const connect = async () => {
@@ -152,19 +126,19 @@ const ConversationScreen = () => {
         } else {
             const token = await AsyncStorage.getItem("token");
             let sock = SockJS(HOST_URL + "/socket");
-            let stompClient = over(sock);
+            let stompClient : any = over(sock);
             setStompClient(stompClient);
             if(stompClient.status !== "CONNECTED") {
                 stompClient.connect({username: authUser?.username, token: token}, (frame: any) => {
-                    stompClient.subscribe("/chatroom/" + chat?.id, messageReceived)
+                    stompClient.subscribe("/chatroom/" + chat.id, messageReceived)
                 }, notConnected)
             }
         }
     }
-    const messageReceived = (payload: any) => {
-        setMessageList((prev: any) => [...prev, JSON.parse(payload.body)])
-        console.log("payload.body");
-        console.log(payload.body);
+    const messageReceived =  (payload: any) => {
+        const taker = chat?.participants[0].user?.id == authUser.id ? chat.participants[1].user : chat.participants[0].user;
+        const message : CHATMESSAGE = JSON.parse(payload.body);
+        dispatch(receiveMessageFromSocket(message, taker) as any);
     }
   
     const notConnected = () => {
@@ -172,23 +146,21 @@ const ConversationScreen = () => {
     }
 
     useEffect(() => {
-        if(stompClient == null && !isblocked && chat && (chat?.id == chatId || chat?.matchId == matchId)) {
+        if(stompClient == null) {
           connect();
         }
-    }, [stompClient, chat, chatId, matchId, isblocked])
-
+    }, [stompClient])
 
     const addMessageFunction = async () => {
-        if(chat && messageInput) {
-            const token = await AsyncStorage.getItem("token")
-            const messageForm = {
+        if(stompClient && chat && messageInput && authUser && receiver) {
+            const token = await AsyncStorage.getItem("token") ?? "";
+            const messageForm : MESSAGEFORM = {
                 content: messageInput,
-                chatId: chat?.id,
+                chatId: chat.id,
                 token: token
             }
-            if(stompClient != null) {
-              stompClient.send("/app/message", {}, JSON.stringify(messageForm));
-            }
+            dispatch(addMessageAction(messageForm, receiver) as any);
+            // stompClient.send("/app/message", {}, JSON.stringify(messageForm));
             setMessageInput("")
         }
     }
@@ -206,12 +178,12 @@ const ConversationScreen = () => {
         }  
     }
     
-    if(isLoading || !chat ||  (messageList.length > 0 && messageList?.[0].chatId != chat?.id)) {
+    if(isLoading || !chat ||  (chatMessages.length > 0 && chatMessages?.[0].chatId != chat?.id)) {
         return <LoadingComponent/>
     }
 
     const goback = async () => {
-        setMessageList([]);
+        dispatch(messageResetAction() as any);
         navigation.goBack();
     }
 
@@ -233,7 +205,7 @@ const ConversationScreen = () => {
             <FlatList
                 refreshing={isRefreshing}
                 onRefresh={loadChatMessages}
-                data={messageList}
+                data={chatMessages}
                 keyExtractor={(item: any) => item.id}
                 renderItem={handleRenderItem}
                 showsVerticalScrollIndicator={false}

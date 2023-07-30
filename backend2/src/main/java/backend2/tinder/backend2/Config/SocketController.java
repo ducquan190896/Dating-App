@@ -19,11 +19,11 @@ public class SocketController {
     @Autowired
     SimpMessagingTemplate simpMessagingTemplate;
 
-    @MessageMapping("/message")
-    public void sendMessage(@Payload MessageRequest messageRequest) {
-        MessageResponse response = messageService.add(messageRequest);
-        Long chatIDstring = response.getChatId();
-        String chatID = String.valueOf(chatIDstring);
-        simpMessagingTemplate.convertAndSend("/chatroom/" + chatID, response);
-    }
+    // @MessageMapping("/message")
+    // public void sendMessage(@Payload MessageRequest messageRequest) {
+    //     MessageResponse response = messageService.add(messageRequest);
+    //     Long chatIDstring = response.getChatId();
+    //     String chatID = String.valueOf(chatIDstring);
+    //     simpMessagingTemplate.convertAndSend("/chatroom/" + chatID, response);
+    // }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,8 @@ import jakarta.validation.Valid;
 public class MessageController {
     @Autowired
     MessageService messageService;
+    @Autowired
+    SimpMessagingTemplate simpMessagingTemplate;
 
     @GetMapping("/chat/{chatId}")
     public ResponseEntity<List<MessageResponse>> getAllByChat(@PathVariable Long chatId) {
@@ -36,7 +39,10 @@ public class MessageController {
     }
     @PostMapping("/message")
     public ResponseEntity<MessageResponse> addMessage(@RequestBody @Valid MessageRequest req) {
-        return new ResponseEntity<MessageResponse>(messageService.add(req), HttpStatus.CREATED);
+        MessageResponse res = messageService.add(req);
+        System.out.println("/chatrom/" + res.getChatId());
+        simpMessagingTemplate.convertAndSend("/chatroom/" + res.getChatId(), res);
+        return new ResponseEntity<MessageResponse>(res, HttpStatus.CREATED);
     }
     @DeleteMapping("/message/{id}")
     public ResponseEntity<HttpStatus> deleteMessage(@PathVariable Long id) {

@@ -130,6 +130,7 @@ public class UserServiceIml implements UserService, UserDetailsService {
                }			
                lists.add(interest);	
         });
+        user.setPublicKey(signUp.getPublicKey());
         userRepos.save(user);
 
         List<String> claims = user.getRoles().stream().map(auth -> auth.getName()).collect(Collectors.toList());
@@ -173,7 +174,10 @@ public class UserServiceIml implements UserService, UserDetailsService {
        if(!new BCryptPasswordEncoder().matches(userSignIn.getPassword(), user.getPassword())) {
         throw new BadCredentialsException("the password is wrong");
        }
-       
+       if(userSignIn.getPublicKey() != null) {
+        user.setPublicKey(userSignIn.getPublicKey());
+        userRepos.save(user);
+       }
 
        List<String> claims = user.getRoles().stream().map(auth -> auth.getName()).collect(Collectors.toList());
         String token = JWT.create()
@@ -186,7 +190,7 @@ public class UserServiceIml implements UserService, UserDetailsService {
         response.setStatus(HttpServletResponse.SC_OK); 
         response.setHeader("Authorization", SecurityConstant.authorization + token);
         
-      
+       
         UserResponse res = userMapper.mapUserToResponse(user);
         System.out.println(res);
         return res;
@@ -223,6 +227,15 @@ public class UserServiceIml implements UserService, UserDetailsService {
             auth.setDescription(description);
         }
 
+        userRepos.save(auth);
+        UserResponse res = userMapper.mapUserToResponse(auth);
+        System.out.println(res);
+        return res;
+    }
+    @Override
+    public UserResponse updatePublicKey(String publicKey) {
+        Users auth = getAuthUser();
+        auth.setPublicKey(publicKey);
         userRepos.save(auth);
         UserResponse res = userMapper.mapUserToResponse(auth);
         System.out.println(res);

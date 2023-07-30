@@ -12,4 +12,11 @@ import lombok.Setter;
 public class UserSignIn {
     private String username;
     private String password;
+    private String publicKey;
+    
+    public UserSignIn(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
 }

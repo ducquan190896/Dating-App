@@ -10,6 +10,8 @@ import { CompositeNavigationProp, useNavigation } from '@react-navigation/native
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { TouchableOpacity } from 'react-native'
 import { updateReadStatusOfChatAction } from '../store/actions/ChatAction'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { createShareKey, decrypt } from '../Utils/EndToEndEcryption'
 
 const imageUrlsDefault =   "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=387&q=80";
 
@@ -20,6 +22,17 @@ const ChatCard = ({authUser, chat, navigation}: {authUser: USER, chat: CHAT, nav
   const [authParticipant, setAuthParticipant] =  useState<PARTICIPANT | null>(null);
   const image = receiver?.user?.avatarUrls && receiver?.user?.avatarUrls?.length > 0 && receiver?.user?.avatarUrls[0].startsWith("http") ? receiver?.user?.avatarUrls[0] : HOST_URL + "/api/images/image/" + receiver?.user?.avatarUrls[0];
   // const navigation = useNavigation<ChatListNavigationProp>();
+  const [privateKey, setPrivateKey] = useState<string | null>(null);
+  
+  const decryptFirstMessage =  () => {
+    if(!receiver  || !privateKey || !chat?.lastMessage) {
+      return "";
+    } 
+      const userPublicKey = receiver.user.publicKey
+      const shareKey = createShareKey(userPublicKey, privateKey);
+      const decryptedContent = decrypt(shareKey, chat?.lastMessage?.content);
+      return decryptedContent;
+  }
 
   useEffect(() => {
     if(chat) {
@@ -35,6 +48,15 @@ const ChatCard = ({authUser, chat, navigation}: {authUser: USER, chat: CHAT, nav
     }
   }, [chat])
 
+  const getPrivateKey = async () => {
+    const authPrivateKey = await AsyncStorage.getItem(authUser.username + "-privateKey") ?? "";
+    setPrivateKey(authPrivateKey);
+  }
+
+  useEffect(() => {
+    getPrivateKey();
+  }, [chat])
+
   const navigateToConversationScreen = () => {
     if(authParticipant?.read == false) {
       dispatch(updateReadStatusOfChatAction(chat?.id) as any);
@@ -48,8 +70,8 @@ return (
     
         <View style={tw('flex-1 items-start justify-start')}>
           <Text style={tw('text-lg font-bold')}>{receiver?.user?.username}</Text>
-          {chat?.lastMessage ? (
-            <Text style={tw(`text-base ${authParticipant?.read ? "text-gray-400" : "text-black font-bold"}`)}>{chat?.lastMessage?.participant?.id == authParticipant?.id ? "You: " : ""}{chat?.lastMessage?.content}  - {chat?.lastMessage && new Date(chat?.lastMessage?.dateCreated ).toLocaleString('en-us',{ day: 'numeric', month:'short'})} </Text>
+          {chat?.lastMessage && decryptFirstMessage() ? (
+            <Text style={tw(`text-base ${authParticipant?.read ? "text-gray-400" : "text-black font-bold"}`)}>{chat?.lastMessage?.participant?.id == authParticipant?.id ? "You: " : ""} {privateKey && decryptFirstMessage() ? decryptFirstMessage() : ""}  - {chat?.lastMessage && new Date(chat?.lastMessage?.dateCreated ).toLocaleString('en-us',{ day: 'numeric', month:'short'})} </Text>
           ): (
             <Text></Text>
           )}   

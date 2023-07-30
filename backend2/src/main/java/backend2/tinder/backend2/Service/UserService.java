@@ -19,4 +19,5 @@ public interface UserService {
     Users getAuthUser();
     Users addImage(String img);
     Users removeImage(String img);
+    UserResponse updatePublicKey(String publicKey);
 }

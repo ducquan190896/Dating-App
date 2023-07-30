@@ -1,5 +1,5 @@
 import { Alert,  Keyboard, KeyboardAvoidingView, KeyboardAvoidingViewBase, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import useTailwind from 'tailwind-rn/dist/use-tailwind'
 import axios from 'axios'
@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native'
 import { RootStackParamList } from '../Navigators/MainStack'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { Button } from '@rneui/themed';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const LoginScreen = () => {
     const [username, setUsername] = useState<string>("")
@@ -20,34 +21,15 @@ const LoginScreen = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
 
-    // useEffect(() => {
-    //     if(authSuccess && authUser?.roles?.includes("USER") ) {
-    //         console.log("auth role: " + authUser?.roles);
-    //         Alert.alert("sign in successfully");
-    //         navigation.navigate('BottomTabs')
-    //         dispatch(ResetUser() as any);
-    //     }
-    //     if(authError ) {
-    //         Alert.alert("login failed")       
-    //         dispatch(ResetUser() as any)
-    //     }
-
-    //     // if(authUser && authUser?.roles?.includes("ADMIN")) {
-    //     //     navigation.navigate("AdminStack");
-    //     // }
-        
-    // }, [authSuccess, authError, dispatch, authUser])
-
-    
 
     const submitFunction = async () => {
         console.log("login")
         if(username && username.length > 0 && password && password.length > 0) {
-            await  dispatch(login({username, password}) as any)
+            await  dispatch(login({username, password}, navigation) as any)
             console.log(username + " : " + password)
             setUsername("")
             setPassword("")
-            navigation.navigate('BottomTabs')
+            
         } else {
             Alert.alert("please fill all required information")
         }

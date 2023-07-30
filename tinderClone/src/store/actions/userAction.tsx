@@ -4,24 +4,48 @@ import { Alert } from "react-native";
 import { HOST_URL } from "../store";
 import axios from "axios";
 import { ACTION, CHANGEPASSWORD, LoginForm, USER, UserRegisterForm } from "../../models/index.d";
+import { RootStackParamList } from "../../Navigators/MainStack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { generateKeyPair } from "../../Utils/EndToEndEcryption";
 
-export const login = (loginForm: LoginForm) => async (dispatch: Dispatch<ACTION>, getState: any) => {
+export const checkPublicKey = async (username: string) => {
+    const privateKey = await AsyncStorage.getItem(username + "-privateKey");
+    if(!privateKey) {
+        const keyPair = generateKeyPair();
+        await AsyncStorage.setItem(username + "-privateKey", keyPair.secretKey.toString());
+        return keyPair.publicKey.toString();
+    } else {
+        return null;
+    }
+}
+
+export const login = (loginForm: LoginForm, navigation: NativeStackNavigationProp<RootStackParamList>) => async (dispatch: Dispatch<ACTION>, getState: any) => {
     try {
-        const res = await axios.put(HOST_URL + "/api/users/signIn", {
+        const reqBody : LoginForm = {
             username: loginForm.username,
             password: loginForm.password
-        });
- 
-        const data = res.data
-        console.log(res.data)
-        // console.log(res.headers)
+        };
+        const publicKey = await checkPublicKey(loginForm.username);
+        if(publicKey) {
+            reqBody.publicKey = publicKey
+        }
+        const res = await axios.put(HOST_URL + "/api/users/signIn", reqBody);
+        let data : USER = res.data
         const token : string =  res.headers.authorization ?? ""
-        console.log(token)
+        console.log(token);
         await AsyncStorage.setItem("token", token)
+        console.log(res.data)
+        if(!data.publicKey) {
+            const keyPair = generateKeyPair();
+            await AsyncStorage.setItem(data.username + "-privateKey", keyPair.secretKey.toString());
+            const publicKey = keyPair.publicKey.toString();
+            data = await updatePublicKey(publicKey);
+        }
         dispatch({
             type: "LOG_IN",
             payload: data
         })
+        navigation.navigate('BottomTabs')
     } catch (err) {
         console.log(err);
         dispatch({
@@ -75,6 +99,18 @@ export const Register = (registerForm: UserRegisterForm) => async (dispatch: Dis
         })
     }  
   }
+
+  export const updatePublicKey = async (publicKey: string) => {
+    const token : string | null = await AsyncStorage.getItem("token");  
+    const res = await axios.put(HOST_URL + "/api/users/authUser/updatePublicKey/" + publicKey, {}, {
+        headers: {
+            "Authorization": token ?? ""
+        }
+    })
+    const data = await res.data
+    return data
+     
+ }
 
   export const getAuthUserAction = () => async (dispatch: Dispatch<ACTION>, getState: any) => {
     try {

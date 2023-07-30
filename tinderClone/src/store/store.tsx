@@ -10,6 +10,7 @@ import MatchReducer from './reducers/MatchReducer';
 import ChatReducer from './reducers/ChatReducer';
 import ReportReducer from './reducers/ReportReducer';
 import BlockReducer from './reducers/BlockReducer';
+import MessageReducer from './reducers/MessageReducer';
 
 export const HOST_URL= "http://192.168.0.102:8080";
 const initialState= {};
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
     MATCHES: MatchReducer,
     CHATS: ChatReducer,
     REPORTS: ReportReducer,
-    BLOCKS: BlockReducer
+    BLOCKS: BlockReducer,
+    MESSAGES: MessageReducer
 });
 
 const middleware = [thunk];

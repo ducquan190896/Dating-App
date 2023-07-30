@@ -94,6 +94,9 @@ public class Users {
     @Column(name = "latitude")
     private double latitude;
 
+    @Column(name = "public_key")
+    private String publicKey;
+
    
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Preference preference;

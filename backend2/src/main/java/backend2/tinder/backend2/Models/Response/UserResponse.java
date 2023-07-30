@@ -34,6 +34,7 @@ public class UserResponse {
     private double latitude;
     private Preference preference;
     private List<Interest> interests;
+    private String publicKey;
     
     @Override
     public String toString() {
@@ -77,6 +78,24 @@ public class UserResponse {
         this.longitude = longitude;
         this.latitude = latitude;
     }
+     public UserResponse(Long id, String username, String firstname, String surename, GenderType gender,
+            boolean suspended, String description, List<String> avatarUrls, List<Role> roles, LocalDate birth,
+            double longitude, double latitude, String publicKey) {
+        this.id = id;
+        this.username = username;
+        this.firstname = firstname;
+        this.surename = surename;
+        this.gender = gender;
+        this.suspended = suspended;
+        this.description = description;
+        this.avatarUrls = avatarUrls;
+        this.roles = roles;
+        this.birth = birth;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.publicKey = publicKey;
+    }
+
 
  
 }

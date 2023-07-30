@@ -32,7 +32,8 @@ export interface USER {
     latitude: number,
     preference: Preference,
     interests: Interest[],
-    suspended: boolean
+    suspended: boolean,
+    publicKey: string | null
 }
 
 export interface declaredStateUser  {
@@ -52,7 +53,8 @@ export interface ACTION {
 
 export interface LoginForm {
     username: string,
-    password: string
+    password: string,
+    publicKey?: string
 }
 
 export interface UserRegisterForm {
@@ -66,7 +68,8 @@ export interface UserRegisterForm {
     longitude: number,
     latitude: number,
     avatarUrls?: string[],
-    interests: string[]
+    interests: string[],
+    publicKey?: string
 }
 
 export interface CHANGEPASSWORD {
@@ -155,6 +158,13 @@ export interface CHATMESSAGE {
     participant: PARTICIPANT,
     dateCreated: string,
     dateUpdated: string
+}
+export interface declaredStateMESSAGE {
+    chatMessages: CHATMESSAGE[] |[],
+    chatMessage: CHATMESSAGE | {},
+    chatMessageError: boolean,
+    chatMessageSuccess: boolean,
+    message: string | null
 }
 export interface MESSAGEFORM {
     chatId: number,
