@@ -58,6 +58,9 @@ export const login = (loginForm: LoginForm, navigation: NativeStackNavigationPro
 export const Register = (registerForm: UserRegisterForm) => async (dispatch: Dispatch<ACTION>, getState: any) => {
      try {
         console.log("sign up")
+        const keyPair = generateKeyPair();
+        await AsyncStorage.setItem(registerForm.username + "-privateKey", keyPair.secretKey.toString());
+        registerForm.publicKey = keyPair.publicKey.toString();
         const res = await axios.post(HOST_URL + "/api/users/signup", registerForm);
         const data = await res.data
         console.log(data)
