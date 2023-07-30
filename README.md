@@ -1,10 +1,10 @@
-#Tinder-App
+# Tinder-App
 A dating app gets inspired by Tinder, users can use the app to find best matching according to personal preferences, age, gender, and geographical distance. Additionally, users can chat with each other in real-time and End-To-End encryption is also applied in messaging functionality to maintain high security.
 
-#Video demo
+# Video demo
 link: https://www.youtube.com/watch?v=7yle5Q6lFLs
 
-#Features
+# Features
 - Login and register user
 - Matching users together based on their preferences, customized geographical distance from user's current location, age, and gender
 - User can see list of people who are interested in her/him
@@ -13,7 +13,7 @@ link: https://www.youtube.com/watch?v=7yle5Q6lFLs
 - A user can block matched partners who offended him/her. the conversation with the blocked people will be disabled.
 - A user can report matched partners. If someone is reported by more than three other users, her/his account will be disabled from the application.
 
-#Technologies
+# Technologies
 - SpringBoot, Spring Security, Maven
 - WebSocket
 - PostgresSQL
